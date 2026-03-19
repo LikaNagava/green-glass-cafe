@@ -1,0 +1,8 @@
+.container { max-width: 720px; }
+.category-image { height: 150px; }
+.side-nav {
+    left: 10px;
+    padding: 1rem 0.2rem;
+}
+.side-nav a { font-size: 0.7rem; letter-spacing: 1px; }
+.glass-panel { padding: 2rem; }

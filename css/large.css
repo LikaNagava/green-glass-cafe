@@ -1,0 +1,163 @@
+:root {
+    --accent: #a4c639;
+    --accent-dark: #8fb132;
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --dark-green: #1a361f;
+    --light-green: #2a4a3a;
+}
+
+.container {
+    max-width: 1400px;
+}
+
+.glass-panel {
+    padding: 4rem;
+    border-radius: 3rem;
+}
+
+h1.display-3 {
+    font-size: 5rem;
+    margin-bottom: 2rem;
+}
+.display-3 { font-size: 5rem; }
+.lead {
+    font-size: 2rem;
+}
+
+.description-text {
+    font-size: 1.3rem;
+    line-height: 1.8;
+}
+
+.section-title {
+    font-size: 3rem;
+    margin-bottom: 3rem !important;
+}
+.category-title {
+    font-size: 1.2rem;
+}
+.category-title { font-size: 1.2rem; }
+.side-nav {
+    left: 40px;
+    padding: 2.5rem 1rem;
+    gap: 3rem;
+}
+
+.side-nav a {
+    font-size: 1.1rem;
+    letter-spacing: 4px;
+}
+
+.cart-row {
+    padding: 1.2rem 1.5rem;
+    font-size: 1.2rem;
+}
+
+.cart-item-name {
+    font-size: 1.3rem;
+}
+
+.cart-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.6rem;
+}
+
+.cart-count {
+    font-size: 1.4rem;
+    min-width: 40px;
+}
+
+.cart-price {
+    font-size: 1.4rem;
+}
+
+#total-price {
+    font-size: 2.5rem;
+}
+
+.modal-dialog {
+    max-width: 1200px;
+}
+
+.modal-sidebar {
+    width: 80px;
+}
+
+.sidebar-label {
+    font-size: 1.5rem;
+    letter-spacing: 6px;
+}
+
+.item-row {
+    padding: 2rem;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.item-img {
+    width: 140px;
+    height: 140px;
+    border-width: 4px;
+}
+
+.item-name {
+    font-size: 1.8rem;
+}
+
+.item-weight {
+    font-size: 1.1rem;
+    padding: 0.4rem 1.5rem;
+}
+
+.item-desc {
+    font-size: 1.2rem;
+}
+
+.item-price {
+    font-size: 2rem;
+}
+
+.btn-add {
+    padding: 1rem 2.5rem;
+    font-size: 1.3rem;
+}
+
+.btn-icon {
+    font-size: 1.6rem;
+}
+
+.modal-nav-buttons {
+    padding: 2rem;
+}
+
+.modal-nav-buttons button {
+    padding: 0.8rem 3rem;
+    font-size: 1.2rem;
+}
+
+.cart-row {
+    padding: 1.2rem 1.5rem;
+    font-size: 1.2rem;
+    align-items: center;
+}
+
+.cart-item-name {
+    font-size: 1.3rem;
+}
+
+.cart-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.6rem;
+}
+
+.cart-count {
+    font-size: 1.4rem;
+    min-width: 40px;
+}
+
+.cart-price {
+    font-size: 1.4rem;
+}
