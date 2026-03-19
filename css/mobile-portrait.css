@@ -57,10 +57,17 @@
     bottom: 20px;
     left: 20px;
 }
-
 .card-title {
     font-size: 1.5rem;
 }
+.cart-price {
+    white-space: nowrap;
+}
+
+.cart-item-name {
+    font-size: 0.9rem;
+}
+
 .cafe-info-section {
     padding: 30px 0 20px;
 }
@@ -97,7 +104,6 @@
 /* Модальное окно */
 .modal-content {
     max-width: 100%;
-    overflow-x: hidden;
 }
 
 .pages-container {
@@ -121,9 +127,12 @@
 .item-row {
     padding: 1rem;
     gap: 10px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
-
+.item-footer {
+    flex-wrap: nowrap;
+    gap: 8px;
+}
 .item-img {
     width: 60px;
     height: 60px;
