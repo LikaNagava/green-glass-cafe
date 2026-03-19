@@ -7,12 +7,12 @@ const menuData = {
     ],
     'lunch': [
         { id: 5, name: 'Бизнес-ланч', desc: 'суп дня, горячее, салат', price: 450, weight: '550гр', img: 'media/Обед/Ланч.jpg' },
-        { id: 6, name: 'Борщ', desc: 'традиционный борщ с мясом, подается со сметаной и чесночной пампушкой', price: 380, weight: '380гр', img: 'media/Обед/борщ.png' },
+        { id: 6, name: 'Борщ', desc: 'борщ с мясом, подается со сметаной и пампушкой', price: 380, weight: '380гр', img: 'media/Обед/борщ.png' },
         { id: 7, name: 'Гречка с гуляшом', desc: 'рассыпчатая гречка с говяжьим гуляшом в подливе', price: 360, weight: '350гр', img: 'media/Обед/гречкаГуляш.png' },
         { id: 8, name: 'Грибной суп', desc: 'нежный суп из лесных грибов со сливками и зеленью', price: 360, weight: '300гр', img: 'media/Обед/грибСуп.jpg' },
         { id: 9, name: 'Картошка по-деревенски', desc: 'запеченная с чесноком и розмарином картошка дольками', price: 250, weight: '200гр', img: 'media/Обед/картошка.png' },
         { id: 10, name: 'Паста Карбонара', desc: 'с беконом и пармезаном', price: 520, weight: '350гр', img: 'media/Обед/карбонара.png' },
-        { id: 11, name: 'Солянка сборная мясная', desc: 'насыщенный суп с несколькими видами мяса, оливками и лимоном', price: 420, weight: '350гр', img: 'media/Обед/карбонара.png' }
+        { id: 11, name: 'Солянка мясная', desc: 'насыщенный суп с несколькими видами мяса, оливками и лимоном', price: 420, weight: '350гр', img: 'media/Обед/карбонара.png' }
     ],
     'salads': [
         { id: 12, name: 'С ростбифом', desc: 'сочный ростбиф, молодая картошка, листья салата', price: 750, weight: '250гр', img: 'media/Салаты/салатРостбиф.jpg' },
@@ -39,7 +39,7 @@ const menuData = {
         { id: 26, name: 'Моти с матче', desc: 'японские рисовые лепешки с кремом из матчи и белым шоколадом', price: 320, weight: '120гр', img: 'media/Десерты/моти.jpg' },
         { id: 27, name: 'Тирамису', desc: 'классический', price: 450, weight: '140гр', img: 'media/Десерты/тирамису.png' },
         { id: 28, name: 'Чизкейк', desc: 'с маракуйей', price: 420, weight: '150гр', img: 'media/Десерты/чизкейк.png' },
-        { id: 29, name: 'Яблочный штрудель', desc: 'онкое слоеное тесто с яблоками, корицей и ванильным соусом', price: 380, weight: '150гр', img: 'media/Десерты/штрудель.jpg' }
+        { id: 29, name: 'Яблочный штрудель', desc: 'слоеное тесто с яблоками, корицей и ванильным соусом', price: 380, weight: '150гр', img: 'media/Десерты/штрудель.jpg' }
     ]
 };
 
@@ -88,23 +88,29 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
-    window.addEventListener('scroll', function () {
-        const sections = ['about', 'categories', 'calculator'];
-        const scrollPosition = window.scrollY + 200;
+   window.addEventListener('scroll', function () {
+    const sections = ['about', 'categories', 'calculator'];
+    let closestSection = null;
+    let minDistance = Infinity;
 
-        for (const section of sections) {
-            const element = document.getElementById(section);
-            if (element) {
-                const offsetTop = element.offsetTop;
-                const offsetBottom = offsetTop + element.offsetHeight;
-
-                if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
-                    updateActiveNav(section);
-                    break;
+    for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+            const rect = element.getBoundingClientRect();
+            if (rect.bottom > 0 && rect.top < window.innerHeight) {
+                const distance = Math.abs(rect.top);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestSection = section;
                 }
             }
         }
-    });
+    }
+
+    if (closestSection) {
+        updateActiveNav(closestSection);
+    }
+});
     setTimeout(() => {
         window.dispatchEvent(new Event('scroll'));
     }, 100);
@@ -147,7 +153,7 @@ function openMenu(cat) {
                             <div class="item-desc">${item.desc}</div>
                             <div class="item-footer">
                                 <span class="item-price">${item.price} ₽</span>
-                                <button class="btn-add" onclick="addToCart(${item.id}, '${item.name}', ${item.price})">
+                                <button class="btn-add" onclick="addToCart(${item.id}, '${item.name}', ${item.price}, event)">
                                     <span class="btn-icon">+</span>
                                     <span class="btn-text">Добавить</span>
                                 </button>
@@ -180,7 +186,7 @@ function prevPage() {
     setTimeout(updateNavButtons, 300);
 }
 
-function addToCart(id, name, price) {
+function addToCart(id, name, price, event) {
     const item = cart.find(i => i.id === id);
     if (item) {
         item.count++;
