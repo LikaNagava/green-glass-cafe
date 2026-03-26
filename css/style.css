@@ -497,7 +497,10 @@ flex-shrink: 0;
 .hero-section {
     padding: 60px 0 30px;
 }
-
+.main-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+}
 .text-accent {
     color: var(--accent);
 }
