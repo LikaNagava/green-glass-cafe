@@ -497,7 +497,7 @@ flex-shrink: 0;
 .hero-section {
     padding: 60px 0 30px;
 }
-.main-wrapper {
+.container {
     max-width: 1200px;
     margin: 0 auto;
 }
