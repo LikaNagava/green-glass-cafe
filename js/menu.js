@@ -1,6 +1,3 @@
-// navigation.js
-// Отвечает за боковое меню, прокрутку к секциям, подсветку активного пункта при скролле
-
 function updateActiveNav(sectionId) {
     document.querySelectorAll('.side-nav-modern .nav-link').forEach(link => {
         link.classList.remove('active');
