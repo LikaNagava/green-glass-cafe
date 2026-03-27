@@ -20,6 +20,10 @@ body {
     overflow-x: hidden;
 }
 
+.container {
+    max-width: 1200px;
+}
+
 .pages-container {
     display: flex;
     flex-direction: row;
@@ -497,10 +501,47 @@ flex-shrink: 0;
 .hero-section {
     padding: 60px 0 30px;
 }
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
 .text-accent {
     color: var(--accent);
+}
+.notification-toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--accent);
+    color: #0a110b;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    z-index: 1100;
+    animation: slideIn 0.3s ease forwards;
+}
+
+.notification-toast.hide {
+    animation: slideOut 0.3s ease forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
 }
