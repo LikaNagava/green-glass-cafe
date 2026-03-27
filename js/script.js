@@ -45,6 +45,61 @@ const menuData = {
 
 let cart = [];
 let myModal;
+function renderCart() {
+    const root = document.getElementById('cart-root');
+    const totalEl = document.getElementById('total-price');
+
+    if (cart.length === 0) {
+        root.innerHTML = '<p class="cart-empty">🛒 Корзина пуста</p>';
+        totalEl.innerText = '0 ₽';
+        return;
+    }
+
+    root.innerHTML = cart.map(item => `
+        <div class="cart-row">
+            <span class="cart-item-name">${item.name}</span>
+            <div class="cart-controls">
+                <button class="cart-btn" onclick="updateQty(${item.id}, -1)">−</button>
+                <span class="cart-count">${item.count}</span>
+                <button class="cart-btn" onclick="updateQty(${item.id}, 1)">+</button>
+            </div>
+            <span class="cart-price">${item.price * item.count} ₽</span>
+        </div>
+    `).join('');
+
+    const total = cart.reduce((sum, item) => sum + (item.price * item.count), 0);
+    totalEl.innerText = `${total} ₽`;
+}
+
+function updateQty(id, delta) {
+    const item = cart.find(i => i.id === id);
+    if (item) {
+        item.count += delta;
+        if (item.count <= 0) {
+            cart = cart.filter(i => i.id !== id);
+        }
+    }
+    renderCart();
+}
+
+function addToCart(id, name, price, event) {
+    const item = cart.find(i => i.id === id);
+    if (item) {
+        item.count++;
+    } else {
+        cart.push({ id, name, price, count: 1 });
+    }
+    renderCart();
+    showNotification('Добавлено в корзину ✓');
+    const btn = event.target.closest('.btn-add');
+    if (btn) {
+        btn.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            btn.style.transform = 'scale(1)';
+        }, 200);
+    }
+}
+
 function updateNavButtons() {
     const wrapper = document.getElementById('pagesWrapper');
     const navButtons = document.querySelector('.modal-nav-buttons');
@@ -66,63 +121,25 @@ function updateNavButtons() {
     nextBtn.disabled = (currentIndex >= totalPages - 1);
 }
 
-function updateActiveNav(sectionId) {
-    document.querySelectorAll('.side-nav-modern .nav-link').forEach(link => {
-        link.classList.remove('active');
-    });
-    const activeLink = document.querySelector(`.side-nav-modern .nav-link[href="#${sectionId}"]`);
-    if (activeLink) {
-        activeLink.classList.add('active');
-    }
+function nextPage() {
+    const w = document.getElementById('pagesWrapper');
+    if (!w) return;
+    w.scrollBy({ left: w.offsetWidth, behavior: 'smooth' });
+    setTimeout(updateNavButtons, 300);
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    myModal = new bootstrap.Modal(document.getElementById('menuModal'));
-    document.querySelectorAll('.side-nav-modern .nav-link').forEach(link => {
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            const href = this.getAttribute('href');
-            if (href) {
-                const sectionId = href.substring(1);
-                scrollToSection(sectionId);
-            }
-        });
-    });
-   window.addEventListener('scroll', function () {
-    const sections = ['about', 'categories', 'calculator'];
-    let closestSection = null;
-    let minDistance = Infinity;
-
-    for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-            const rect = element.getBoundingClientRect();
-            if (rect.bottom > 0 && rect.top < window.innerHeight) {
-                const distance = Math.abs(rect.top);
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    closestSection = section;
-                }
-            }
-        }
-    }
-
-    if (closestSection) {
-        updateActiveNav(closestSection);
-    }
-});
-    setTimeout(() => {
-        window.dispatchEvent(new Event('scroll'));
-    }, 100);
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && myModal) {
-            myModal.hide();
-        }
-    });
-});
+function prevPage() {
+    const w = document.getElementById('pagesWrapper');
+    if (!w) return;
+    w.scrollBy({ left: -w.offsetWidth, behavior: 'smooth' });
+    setTimeout(updateNavButtons, 300);
+}
 
 function openMenu(cat) {
-    updateActiveNav('categories');
+    if (typeof updateActiveNav === 'function') {
+        updateActiveNav('categories');
+    }
+
     const items = menuData[cat] || menuData['salads'];
     const wrapper = document.getElementById('pagesWrapper');
     const label = document.getElementById('modalCategoryName');
@@ -172,79 +189,28 @@ function openMenu(cat) {
     }
 }
 
-function nextPage() {
-    const w = document.getElementById('pagesWrapper');
-    if (!w) return;
-    w.scrollBy({ left: w.offsetWidth, behavior: 'smooth' });
-    setTimeout(updateNavButtons, 300);
-}
-
-function prevPage() {
-    const w = document.getElementById('pagesWrapper');
-    if (!w) return;
-    w.scrollBy({ left: -w.offsetWidth, behavior: 'smooth' });
-    setTimeout(updateNavButtons, 300);
-}
-
-function addToCart(id, name, price, event) {
-    const item = cart.find(i => i.id === id);
-    if (item) {
-        item.count++;
-    } else {
-        cart.push({ id, name, price, count: 1 });
-    }
-    renderCart();
-    const btn = event.target.closest('.btn-add');
-    if (btn) {
-        btn.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-            btn.style.transform = 'scale(1)';
-        }, 200);
-    }
-}
-
-function updateQty(id, delta) {
-    const item = cart.find(i => i.id === id);
-    if (item) {
-        item.count += delta;
-        if (item.count <= 0) {
-            cart = cart.filter(i => i.id !== id);
+document.addEventListener('DOMContentLoaded', function () {
+    myModal = new bootstrap.Modal(document.getElementById('menuModal'));
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && myModal) {
+            myModal.hide();
         }
-    }
-    renderCart();
-}
+    });
+});
 
-function renderCart() {
-    const root = document.getElementById('cart-root');
-    const totalEl = document.getElementById('total-price');
-
-    if (cart.length === 0) {
-        root.innerHTML = '<p class="cart-empty">🛒 Корзина пуста</p>';
-        totalEl.innerText = '0 ₽';
-        return;
+function showNotification(message) {
+    const existingNotification = document.querySelector('.notification-toast');
+    if (existingNotification) {
+        existingNotification.remove();
     }
 
-    root.innerHTML = cart.map(item => `
-        <div class="cart-row">
-            <span class="cart-item-name">${item.name}</span>
-            <div class="cart-controls">
-                <button class="cart-btn" onclick="updateQty(${item.id}, -1)">−</button>
-                <span class="cart-count">${item.count}</span>
-                <button class="cart-btn" onclick="updateQty(${item.id}, 1)">+</button>
-            </div>
-            <span class="cart-price">${item.price * item.count} ₽</span>
-        </div>
-    `).join('');
+    const notification = document.createElement('div');
+    notification.className = 'notification-toast';
+    notification.innerText = message;
+    document.body.appendChild(notification);
 
-    const total = cart.reduce((sum, item) => sum + (item.price * item.count), 0);
-    totalEl.innerText = `${total} ₽`;
-}
-
-function scrollToSection(sectionId) {
-    const section = document.getElementById(sectionId);
-    if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
-        updateActiveNav(sectionId);
-    }
-    return false;
+    setTimeout(() => {
+        notification.classList.add('hide');
+        setTimeout(() => notification.remove(), 300);
+    }, 1500);
 }
